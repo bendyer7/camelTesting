@@ -38,21 +38,37 @@
         <property name="connectionFactory" ref="pooledConnectionFactory"/>
     </bean>
 
+
     <!-- with concurrentConsumers 10: 10 consumer threads created per route component-->
     <bean id="jmsConfig" class="org.apache.camel.component.jms.JmsConfiguration">
         <property name="connectionFactory" ref="pooledConnectionFactory"/>
         <property name="concurrentConsumers" value="1"/>
     </bean>
 
+    <bean id="jmsConfigXacted" class="org.apache.camel.component.jms.JmsConfiguration">
+        <property name="connectionFactory" ref="pooledConnectionFactory"/>
+        <property name="concurrentConsumers" value="1"/>
+    </bean>
+
+
+
+
     <bean id="activemq" class="org.apache.activemq.camel.component.ActiveMQComponent">
         <property name="configuration" ref="jmsConfig"/>
+        <property name="transacted" value="false"/>
         <!-- If transacted=true then enable CACHE_CONSUMER (if not using XA) to run faster. See more details at: http://camel.apache.org/jms -->
         <!--  <property name="transacted" value="true"/> <property name="cacheLevelName" value="CACHE_CONSUMER"/> -->
     </bean>
 
-    <!--  can a transacted and non transacted component share the same connection pool? -->
+    <!-- even with the above with transacted set to false, if you have a different compoActiveMQComponent nent using the same jmsConfig
+    which is transacted, then the above component will also become transacted even though you said faise.
+
+    but all you need to do is have a separate JmsConfiguration for each component and this allows 1 out of the 2 components to be transacted, as per the setup here.
+    Note that both JmsConfigurations can use the same connectionFactory / connection pool. -->
+
+
     <bean id="activemqXacted" class="org.apache.activemq.camel.component.ActiveMQComponent">
-        <property name="configuration" ref="jmsConfig"/>
+        <property name="configuration" ref="jmsConfigXacted"/>
         <!-- If transacted=true then enable CACHE_CONSUMER (if not using XA) to run faster. See more details at: http://camel.apache.org/jms -->
         <!--  <property name="transacted" value="true"/> <property name="cacheLevelName" value="CACHE_CONSUMER"/> -->
         <property name="transacted" value="true"/>

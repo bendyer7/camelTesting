@@ -1,4 +1,4 @@
-package org.ben.routeBuilders2;
+package org.ben.routebuilders;
 
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.log4j.LogManager;
