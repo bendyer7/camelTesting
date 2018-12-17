@@ -85,7 +85,7 @@ public class MQRouteBuilderAndErrorHandling extends RouteBuilder {
 
                 .handled(true)  //handled doesn't have to be before subsequent processors but seems to make some sense for readability for it to be first
                 .log("onException has caught a DoSomethingElseException")
-                .to("file:/C:/Xylem/Test/backupFolder");
+                .to("file:/Xylem/Test/backupFolder");
 
                 //you could specify a number of retries for this if you wish.
                 //so looks like it will handle the exception, will route to the to above instead of progressing with original route
